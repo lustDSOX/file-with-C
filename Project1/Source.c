@@ -3,8 +3,8 @@ main() {
 	system("chcp 1251>nul");
 	FILE* file;
 	FILE* answer = fopen("answer.txt", "w+");
-	char line[6];
 	float a, b, c;
+	int bool = 0;
 	if ((file = fopen("1.txt", "r")))
 	{
 		fseek(file, 0, SEEK_END);
@@ -15,45 +15,33 @@ main() {
 		{
 			text[i] = fgetc(file);
 		}
-		if (size > 5) 
+		for (size_t i = 0; i < size; i++)
 		{
-			for (size_t i = 0; i < size; i++)
-			{
-				if ((text[i] == 44 || text[i] == 46) && i == 1) {
-					char* f = calloc(3, 1);
-					f[0] = text[i - 1];
-					f[1] = text[i];
-					f[2] = text[i + 1];
-					a = atof(f);
-					printf("%f ", a);
-				}
-				if ((text[i] == 44 || text[i] == 46) && i == 5) {
-					char* f = calloc(3, 1);
-					f[0] = text[i - 1];
-					f[1] = text[i];
-					f[2] = text[i + 1];
-					b = atof(f);
-					printf("%f ", a);
-				}
-				if ((text[i] == 44 || text[i] == 46) && i == 9) {
-					char* f = calloc(3, 1);
-					f[0] = text[i - 1];
-					f[1] = text[i];
-					f[2] = text[i + 1];
-					c = atof(f);
-					printf("%f ", a);
-				}
+			if (text[i] == '\n') {
+				bool = 1;
+			}
+			if (text[i] < -1) {
+				printf("Введите другие значения");
+				return 1;
 			}
 		}
-		else {
-			a = text[0] - '0';
-			b = text[2] - '0';
-			c = text[4] - '0';
+		if (bool == 1) {
+			while ((fscanf(file, "%f\n%f\n%f", &a, &b, &c)) != EOF)
+			{
+				printf("a = %f\nb = %f\nc = %f", a, b, c);
+			}
 		}
-
+		else
+		{
+			while ((fscanf(file, "%f %f %f", &a, &b, &c)) != EOF)
+			{
+				printf("a = %f\nb = %f\nc = %f", a, b, c);
+			}
+		}
+		
 	}
-
-	//QuadraticEquation(a, b, c,answer);
+	
+	QuadraticEquation(a, b, c,answer);
 }
 
 void QuadraticEquation(float a, float b, float c, FILE* file)
@@ -62,7 +50,7 @@ void QuadraticEquation(float a, float b, float c, FILE* file)
 	discriminant = powf(b, 2.0) - 4 * a * c;
 	if (discriminant < 0)
 	{
-		fprintf(file, "Дискриминанта нет");
+		fprintf(file, "Решения нет");
 	}
 	if (discriminant == 0)
 	{
