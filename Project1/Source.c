@@ -2,7 +2,7 @@
 main() {
 	system("chcp 1251>nul");
 	FILE* file;
-	FILE* answer = fopen("answer.txt", "w+");
+	FILE* answer = fopen("answer.txt", "w+t");
 	float a, b, c;
 	int bool = 0;
 	if ((file = fopen("1.txt", "r")))
@@ -20,37 +20,35 @@ main() {
 			if (text[i] == '\n') {
 				bool = 1;
 			}
-			if (text[i] < -1) {
+			if (text[i] < -1 || text[i] >96) {
 				printf("Введите другие значения");
 				return 1;
 			}
 		}
+		fseek(file, 0, SEEK_SET);
 		if (bool == 1) {
-			while ((fscanf(file, "%f\n%f\n%f", &a, &b, &c)) != EOF)
-			{
-				printf("a = %f\nb = %f\nc = %f", a, b, c);
-			}
+			fscanf(file, "%f\n%f\n%f", &a, &b, &c);
+			printf("a = %f\nb = %f\nc = %f", a, b, c);
 		}
 		else
 		{
-			while ((fscanf(file, "%f %f %f", &a, &b, &c)) != EOF)
-			{
-				printf("a = %f\nb = %f\nc = %f", a, b, c);
-			}
+			fscanf(file, "%f %f %f", &a, &b, &c);
+			printf("a = %f\nb = %f\nc = %f", a, b, c);
 		}
-		
+
 	}
-	
-	QuadraticEquation(a, b, c,answer);
+
+	QuadraticEquation(a, b, c, answer);
 }
 
 void QuadraticEquation(float a, float b, float c, FILE* file)
 {
 	float x1, x2, discriminant;
 	discriminant = powf(b, 2.0) - 4 * a * c;
-	if (discriminant < 0)
+	if (discriminant < 0 || a==0)
 	{
 		fprintf(file, "Решения нет");
+		return 1;
 	}
 	if (discriminant == 0)
 	{
